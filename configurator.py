@@ -22,6 +22,6 @@ def read():
             ser_json.phone_book_filename = phone_book_filename
             save, load = ser_json.save, ser_json.load
         case _:
-            save, load = None, None
+           raise ValueError(f"Exception while serializing the file!")
 
     return save, load

@@ -1,8 +1,8 @@
-import manage_record
+from  manage_record import Phonebook
 import configurator
 
 phone_book_name = ""
-phone_book = {}
+phone_book = Phonebook()
 save = None
 load = None
 
@@ -10,28 +10,36 @@ def request_name():
     return input("Please enter contact name\n")
 
 def request_number():
-    return input("Please enter contact number\n")
+    return input("Please enter contact number(mandatory)\n")
+def request_address():
+    return input("Please enter contact address\n")
+def request_email():
+    return input("Please enter contact email\n")
 
 def request_create():
     name = request_name()
     number = request_number()
-    manage_record.create_record(name, number)
-    print(f"Contact '{name}' with number - {number} was added!\n")
+    address = request_address()
+    email = request_email()
+    phone_book.create_contact(name, number,address,email)
+    print(f"Contact '{name}' with number - {number} - address- {address} - email - {email} was added!\n")
 
 def request_read():
     name = request_name()
-    number = manage_record.read_record(name)
-    print(f"'{name}' number is {number}!\n")
+    read_contact = phone_book.read_contact(name)
+    print(f"{name}: number - {read_contact.number} - address- {read_contact.address} - email - {read_contact.email}\n")
 
 def request_update():
     name = request_name()
     number = request_number()
-    manage_record.update_record(name, number)
+    address = request_address()
+    email = request_email()
+    phone_book.update_contact(name, number,address,email)
     print(f"'{name}' new number is {number}!\n")
 
 def request_delete():
     name = request_name()
-    manage_record.delete_record(name)
+    phone_book.delete_contact(name)
     print(f"Contact '{name}' was deleted!\n")
 
 def request_exit():
@@ -57,17 +65,17 @@ def request_new_input():
 
 def load_phone_book():
     try:
-        phone_book = load()
+        phone_book = Phonebook(load())
     except Exception as e:
         print(f'Exception occured while reading phone_book data!\n{e}!')
         print('No phone_book was loaded!')
-        phone_book = {}
+        phone_book = Phonebook()
     return phone_book
 
 def save_phone_book():
     global phone_book
     try:
-        save(manage_record.phone_book)
+        save(phone_book)
     except Exception as e:
         print(f'Exception occured while saving phone_book data!\n{e}!')
         print('No data was saved!')
@@ -80,7 +88,7 @@ def run():
         except Exception as e:
             print(f'Exception occured while config file!\n{e}!')
 
-        manage_record.phone_book = load_phone_book()
+        phone_book = load_phone_book()
 
         while True:
             action = request_input()

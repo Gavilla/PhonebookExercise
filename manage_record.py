@@ -1,32 +1,48 @@
 '''insert auto doc - phonebook controller'''
+class Phonebook:
+    def __init__ (self, cont = None):
+        if cont is None: self.contacts = {}
+        else: self.contacts = cont
 
-phone_book = {}
 
-def verify_record(is_record, get_error_msg):
-    def decorator(func):
-        def wrapper(record, *args):
-            if (record in phone_book) == is_record:
-                return func(record, *args)
-            else:
-                raise KeyError(get_error_msg(record, *args))
-        return wrapper
-    return decorator
+    def __str__(self):
+        contacts_str = ""
+        for  contact in self.contacts:
+            contacts_str.append(f"{contact} /n")
+        return contacts_str()
 
-verify_true = verify_record(True, lambda record,*args: f"Record '{record}' doesn't exist!")
-verify_false = verify_record(False, lambda record,*args: f"Record '{record}' already exist!")
+    @staticmethod
+    def verify_contact(is_contact, get_error_msg):
+        def decorator(func):
+            def wrapper(self,contact, *args):
+                if (contact in self.contacts) == is_contact:
+                    return func(self, contact, *args)
+                else:
+                    raise KeyError(get_error_msg(contact, *args))
+            return wrapper
+        return decorator
 
-@verify_false
-def create_record(record, value):
-    phone_book[record] = value
+    verify_true = verify_contact(True, lambda contact,*args: f"Contact '{contact}' doesn't exist!")
+    verify_false = verify_contact(False, lambda contact,*args: f"Contact '{contact}' already exist!")
 
-@verify_true
-def read_record(record):
-    return phone_book[record]
+    @verify_false
+    def create_contact(self,contact, value, address = "", email = ""):
+        self.contacts[contact] = ContactDetails(value,address,email)
 
-@verify_true
-def update_record(record, value):
-    phone_book[record] = value
+    @verify_true
+    def read_contact(self, contact):
+        return self.contacts[contact]
 
-@verify_true
-def delete_record(record):
-    del phone_book[record]
+    @verify_true
+    def update_contact(self,contact, value, address = "", email = ""):
+        self.contacts[contact] = ContactDetails(value,address,email)
+
+    @verify_true
+    def delete_contact(self,contact):
+        del self.contacts[contact]
+
+class ContactDetails:
+    def __init__(self, v, a, e):
+        self.number = v
+        self.address = a
+        self.email = e
