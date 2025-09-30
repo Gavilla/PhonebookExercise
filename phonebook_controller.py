@@ -35,12 +35,16 @@ def request_update():
     address = request_address()
     email = request_email()
     phone_book.update_contact(name, number,address,email)
-    print(f"'{name}' new number is {number}!\n")
+    print(f"Contact updated: {name}: number - {number} - address- {address} - email - {email}!\n")
 
 def request_delete():
     name = request_name()
     phone_book.delete_contact(name)
     print(f"Contact '{name}' was deleted!\n")
+
+def request_show_all():
+    for name, details in phone_book.contacts.items():
+        print(f"{name}: number - {details.number} - address- {details.address} - email - {details.email}\n")
 
 def request_exit():
     save_phone_book()
@@ -51,6 +55,7 @@ actions = {
     '2': {'name': 'Find contact', 'action': request_read},
     '3': {'name': 'Update contact', 'action': request_update},
     '4': {'name': 'Delete contact', 'action': request_delete},
+    '5': {'name': 'Show all contacts', 'action': request_show_all},
     'q': {'name': 'Exit', 'action': request_exit},
 }
 
@@ -75,7 +80,7 @@ def load_phone_book():
 def save_phone_book():
     global phone_book
     try:
-        save(phone_book)
+        save(phone_book.to_dict())
     except Exception as e:
         print(f'Exception occured while saving phone_book data!\n{e}!')
         print('No data was saved!')

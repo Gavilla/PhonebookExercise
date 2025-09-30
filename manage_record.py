@@ -5,11 +5,11 @@ class Phonebook:
         else: self.contacts = cont
 
 
-    def __str__(self):
-        contacts_str = ""
-        for  contact in self.contacts:
-            contacts_str.append(f"{contact} /n")
-        return contacts_str()
+    def to_dict(self):
+        dict_cont = {}
+        for contact in self.contacts:
+            dict_cont[contact] = self.contacts[contact]
+        return dict_cont
 
     @staticmethod
     def verify_contact(is_contact, get_error_msg):
@@ -27,19 +27,19 @@ class Phonebook:
 
     @verify_false
     def create_contact(self,contact, value, address = "", email = ""):
-        self.contacts[contact] = ContactDetails(value,address,email)
+        self.contacts[contact.lower()] = ContactDetails(value,address,email)
 
     @verify_true
     def read_contact(self, contact):
-        return self.contacts[contact]
+        return self.contacts[contact.lower()]
 
     @verify_true
     def update_contact(self,contact, value, address = "", email = ""):
-        self.contacts[contact] = ContactDetails(value,address,email)
+        self.contacts[contact.lower()] = ContactDetails(value,address,email)
 
     @verify_true
     def delete_contact(self,contact):
-        del self.contacts[contact]
+        del self.contacts[contact.lower()]
 
 class ContactDetails:
     def __init__(self, v, a, e):
