@@ -3,8 +3,7 @@ import configurator
 
 phone_book_name = ""
 phone_book = Phonebook()
-save = None
-load = None
+serializer = None
 
 def request_name():
     return input("Please enter contact name\n")
@@ -70,7 +69,8 @@ def request_new_input():
 
 def load_phone_book():
     try:
-        phone_book = Phonebook(load())
+        phone_book = Phonebook(serializer.load())
+        phone_book.restore_format()
     except Exception as e:
         print(f'Exception occured while reading phone_book data!\n{e}!')
         print('No phone_book was loaded!')
@@ -80,16 +80,16 @@ def load_phone_book():
 def save_phone_book():
     global phone_book
     try:
-        save(phone_book.to_dict())
+        serializer.save(phone_book.to_dict())
     except Exception as e:
         print(f'Exception occured while saving phone_book data!\n{e}!')
         print('No data was saved!')
 
 
 def run():
-        global phone_book, save, load
+        global phone_book, serializer
         try:
-           save, load = configurator.read()
+           serializer = configurator.read()
         except Exception as e:
             print(f'Exception occured while config file!\n{e}!')
 

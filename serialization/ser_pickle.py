@@ -1,11 +1,14 @@
 import pickle
+from . import *
 
-phone_book_filename = ''
+class SerPickle(Serializer):
+    def __init__(self, file_name = ''):
+        super().__init__(file_name) 
 
-def load():
-    with open(phone_book_filename, 'rb') as f:
-        return pickle.load(f)
+    def load(self):
+        with open(self.filename, 'rb') as f:
+            return pickle.load(f)
 
-def save(obj):
-    with open(phone_book_filename, 'wb') as f:
-        pickle.dump(obj, f)
+    def save(self,obj):
+        with open(self.filename, 'wb') as f:
+            pickle.dump(obj, f)

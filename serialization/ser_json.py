@@ -1,10 +1,14 @@
 import json
-phone_book_filename = ''
+from . import *
 
-def load():
-    with open(phone_book_filename, 'rt') as f:
-        return json.load(f)
+class SerJson(Serializer):
+    def __init__(self, file_name = ''):
+        super().__init__(file_name) 
 
-def save(obj):
-    with open(phone_book_filename, 'wt') as f:
-        json.dump(obj, f)
+    def load(self):
+        with open(self.filename , 'rt') as f:
+            return json.load(f)
+
+    def save(self,obj):
+        with open(self.filename , 'wt') as f:
+            json.dump(obj, f)
